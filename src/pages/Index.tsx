@@ -56,6 +56,7 @@ const projects = [
   {
     name: "Ecommerce Website",
     tech: "ASP.NET MVC, VNPay",
+    githubUrl: "https://github.com/trong-pabel/Ecommerce",
     highlights: [
       "Product, cart, and order management",
       "VNPay payment integration",
@@ -65,6 +66,7 @@ const projects = [
   {
     name: "Shoe Sales Software",
     tech: "C#, SQL Server",
+    githubUrl: "https://github.com/trong-pabel/QL_CUAHANG",
     highlights: [
       "Cart, invoicing, payment, employee management",
       "Database design and CRUD implementation",
