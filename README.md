@@ -52,3 +52,4 @@ Fresher C/C++ Software Engineer
 
 - Email: nguyentrong6655@gmail.com  
 - LinkedIn: https://www.linkedin.com/in/nguyenhuu-trong21/
+- Facebook: https://www.facebook.com/trongpro21/
