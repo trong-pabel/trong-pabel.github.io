@@ -5,7 +5,9 @@ import { SkillBadge } from "@/components/SkillBadge";
 import { ExperienceCard } from "@/components/ExperienceCard";
 import { ProjectCard } from "@/components/ProjectCard";
 import { GraduationCap, Award, Heart } from "lucide-react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
+import soccerMedal from "@/assets/soccerMedal.jpg";
 
 const skillGroups = [
   { category: "Languages", skills: ["C", "C++", "C#"] },
@@ -75,6 +77,7 @@ const projects = [
 ];
 
 const Index = () => {
+  const [showSoccerModal, setShowSoccerModal] = useState(false);
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -198,9 +201,12 @@ const Index = () => {
               <h3 className="font-display font-bold text-foreground">Interests</h3>
             </div>
             <div className="flex flex-wrap gap-3">
-              <span className="px-4 py-2 rounded-lg bg-secondary text-foreground text-sm">
+              <button
+                onClick={() => setShowSoccerModal(true)}
+                className="px-4 py-2 rounded-lg bg-secondary text-foreground text-sm hover:bg-primary/10 hover:text-primary transition-colors"
+              >
                 ⚽ Soccer
-              </span>
+              </button>
               <span className="px-4 py-2 rounded-lg bg-secondary text-foreground text-sm">
                 🏸 Badminton
               </span>
@@ -217,6 +223,45 @@ const Index = () => {
           </p>
         </div>
       </footer>
+
+      <AnimatePresence>
+        {showSoccerModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center"
+            onClick={() => setShowSoccerModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="relative bg-background rounded-xl p-6 shadow-2xl max-w-3xl w-full"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close button */}
+              <button
+                onClick={() => setShowSoccerModal(false)}
+                className="absolute top-3 right-3 text-muted-foreground hover:text-primary"
+              >
+                ✕
+              </button>
+
+              <img
+                src={soccerMedal}
+                alt="Soccer Medal"
+                className="rounded-lg w-full object-contain"
+              />
+
+              <p className="mt-4 text-center text-sm text-muted-foreground">
+                Soccer Tournament Medal
+              </p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
