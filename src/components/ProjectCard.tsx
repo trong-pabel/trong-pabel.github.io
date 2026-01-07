@@ -5,10 +5,17 @@ interface ProjectCardProps {
   name: string;
   tech: string;
   highlights: string[];
+  githubUrl?: string;
   index: number;
 }
 
-export const ProjectCard = ({ name, tech, highlights, index }: ProjectCardProps) => {
+export const ProjectCard = ({
+  name,
+  tech,
+  highlights,
+  githubUrl,
+  index,
+}: ProjectCardProps) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -19,8 +26,29 @@ export const ProjectCard = ({ name, tech, highlights, index }: ProjectCardProps)
       className="bg-gradient-card rounded-xl border border-border p-6 shadow-card hover:border-primary/30 hover:shadow-glow transition-all duration-300"
     >
       <div className="flex items-start justify-between mb-3">
-        <h3 className="font-display text-lg font-bold text-foreground">{name}</h3>
-        <ExternalLink className="w-4 h-4 text-muted-foreground" />
+        <h3 className="font-display text-lg font-bold text-foreground">
+          {name}
+        </h3>
+
+        {githubUrl && (
+          <a
+            href={githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Open ${name} on GitHub`}
+            className="
+              text-muted-foreground
+              hover:text-primary
+              transition-colors
+              p-1
+              rounded-md
+              hover:bg-primary/10
+            "
+            onClick={(e) => e.stopPropagation()}
+          >
+            <ExternalLink className="w-4 h-4" />
+          </a>
+        )}
       </div>
 
       <p className="text-primary text-sm font-medium mb-4">{tech}</p>
