@@ -94,7 +94,7 @@ export const Hero = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          className="absolute left-1/2 -translate-x-1/2 mt-12 hidden md:block"
         >
           <motion.div
             animate={{ y: [0, 10, 0] }}
