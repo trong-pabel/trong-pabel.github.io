@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "./ThemeToggle";
 
 const navItems = [
   { label: "About", href: "#about" },
@@ -50,12 +51,15 @@ export const Header = () => {
           ))}
         </nav>
 
-        <a
-          href="#about"
-          className="text-sm text-primary font-medium hover:text-primary/80 transition-colors"
-        >
-          Contact
-        </a>
+        <div className="flex items-center gap-4">
+          <ThemeToggle />
+          <a
+            href="#about"
+            className="text-sm text-primary font-medium hover:text-primary/80 transition-colors"
+          >
+            Contact
+          </a>
+        </div>
       </div>
     </motion.header>
   );
