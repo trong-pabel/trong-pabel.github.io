@@ -7,7 +7,7 @@ import { ProjectCard } from "@/components/ProjectCard";
 import { GraduationCap, Award, Heart } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import soccerMedal from "@/assets/soccerMedal.jpg";
+import soccerMedal1 from "@/assets/soccer/soccerMedal1.jpg";
 
 const skillGroups = [
   { category: "Languages", skills: ["C", "C++", "C#"] },
@@ -76,8 +76,55 @@ const projects = [
   },
 ];
 
+type GalleryKey = "soccer" | "badminton";
+
+const galleries: Record<GalleryKey, { title: string; images: { src: string; caption?: string }[] }> = {
+  soccer: {
+    title: "Soccer",
+    images: [
+      { src: soccerMedal1, caption: "Soccer Tournament Medal" },
+      // Add more images as needed
+    ],
+  },
+  badminton: {
+    title: "Badminton",
+    images: [
+      // Add more images as needed
+    ],
+  },
+};
+
 const Index = () => {
-  const [showSoccerModal, setShowSoccerModal] = useState(false);
+  const [activeGallery, setActiveGallery] = useState<GalleryKey | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const isModalOpen = activeGallery !== null;
+
+  const openGallery = (key: GalleryKey) => {
+    const images = galleries[key].images;
+    if (!images || images.length === 0) return; 
+
+    setActiveGallery(key);
+    setActiveIndex(0);
+  };
+
+  const closeModal = () => {
+    setActiveGallery(null);
+    setActiveIndex(0);
+  };
+
+  const nextImage = () => {
+    if (!activeGallery) return;
+    const len = galleries[activeGallery].images.length;
+    setActiveIndex((i) => (i + 1) % len);
+  };
+
+  const prevImage = () => {
+    if (!activeGallery) return;
+    const len = galleries[activeGallery].images.length;
+    setActiveIndex((i) => (i - 1 + len) % len);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -202,14 +249,17 @@ const Index = () => {
             </div>
             <div className="flex flex-wrap gap-3">
               <button
-                onClick={() => setShowSoccerModal(true)}
+                onClick={() => openGallery("soccer")}
                 className="px-4 py-2 rounded-lg bg-secondary text-foreground text-sm hover:bg-primary/10 hover:text-primary transition-colors"
               >
                 ⚽ Soccer
               </button>
-              <span className="px-4 py-2 rounded-lg bg-secondary text-foreground text-sm">
+              <button
+                onClick={() => openGallery("badminton")}
+                className="px-4 py-2 rounded-lg bg-secondary text-foreground text-sm hover:bg-primary/10 hover:text-primary transition-colors"
+              >
                 🏸 Badminton
-              </span>
+              </button>
             </div>
           </motion.div>
         </div>
@@ -225,39 +275,75 @@ const Index = () => {
       </footer>
 
       <AnimatePresence>
-        {showSoccerModal && (
+        {isModalOpen && activeGallery && galleries[activeGallery].images.length > 0 && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center"
-            onClick={() => setShowSoccerModal(false)}
+            onClick={closeModal}
           >
             <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
+              initial={{ scale: 0.92, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="relative bg-background rounded-xl p-6 shadow-2xl max-w-3xl w-full"
+              exit={{ scale: 0.92, opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="relative bg-background rounded-xl p-6 shadow-2xl max-w-4xl w-full mx-4"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Close button */}
+              {/* Close */}
               <button
-                onClick={() => setShowSoccerModal(false)}
+                onClick={closeModal}
                 className="absolute top-3 right-3 text-muted-foreground hover:text-primary"
+                aria-label="Close"
               >
                 ✕
               </button>
 
-              <img
-                src={soccerMedal}
-                alt="Soccer Medal"
-                className="rounded-lg w-full object-contain"
-              />
+              {/* Title */}
+              <div className="mb-4">
+                <p className="text-sm text-muted-foreground">
+                  {galleries[activeGallery].title} • {activeIndex + 1}/{galleries[activeGallery].images.length}
+                </p>
+              </div>
 
-              <p className="mt-4 text-center text-sm text-muted-foreground">
-                Soccer Tournament Medal
-              </p>
+              {/* Image area */}
+              <div className="relative">
+                {/* Prev */}
+                {galleries[activeGallery].images.length > 1 && (
+                  <button
+                    onClick={prevImage}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/80 border border-border rounded-full w-10 h-10 flex items-center justify-center hover:bg-background transition"
+                    aria-label="Previous image"
+                  >
+                    ‹
+                  </button>
+                )}
+
+                <img
+                  src={galleries[activeGallery].images[activeIndex].src}
+                  alt={`${galleries[activeGallery].title} image ${activeIndex + 1}`}
+                  className="rounded-lg w-full max-h-[75vh] object-contain"
+                />
+
+                {/* Next */}
+                {galleries[activeGallery].images.length > 1 && (
+                  <button
+                    onClick={nextImage}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/80 border border-border rounded-full w-10 h-10 flex items-center justify-center hover:bg-background transition"
+                    aria-label="Next image"
+                  >
+                    ›
+                  </button>
+                )}
+              </div>
+
+              {/* Caption */}
+              {galleries[activeGallery].images[activeIndex].caption && (
+                <p className="mt-4 text-center text-sm text-muted-foreground">
+                  {galleries[activeGallery].images[activeIndex].caption}
+                </p>
+              )}
             </motion.div>
           </motion.div>
         )}
